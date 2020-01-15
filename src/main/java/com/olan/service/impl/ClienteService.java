@@ -3,6 +3,8 @@ package com.olan.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.olan.model.Cliente;
@@ -40,6 +42,11 @@ public class ClienteService implements IClienteService{
 	@Override
 	public void eliminar(Integer id) {
 		repo.delete(id);
+	}
+
+	@Override
+	public Page<Cliente> listarPageable(Pageable pageable) {
+		return repo.findAll(pageable);
 	}
 
 }
