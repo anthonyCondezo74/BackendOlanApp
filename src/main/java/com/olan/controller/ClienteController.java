@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -38,7 +40,11 @@ public class ClienteController {
 		return new ResponseEntity<List<Cliente>>(listaCliente, HttpStatus.OK);
 	}
 	
-
+	@GetMapping("/pageable")
+	public ResponseEntity<Page<Cliente>> listarPageable(Pageable pageable) {
+		Page<Cliente> pacientes = service.listarPageable(pageable);
+		return new ResponseEntity<Page<Cliente>>(pacientes, HttpStatus.OK);
+	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Cliente> leerPorId(@PathVariable("id") Integer id) {
