@@ -26,19 +26,23 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idCliente;
 	@ManyToOne
-	@JoinColumn(name="id_tipoCliente", nullable=false, foreignKey=@ForeignKey(name="fk_cliente_tipoCliente" ))
+	@JoinColumn(name="id_tipo_cliente", nullable=false, foreignKey=@ForeignKey(name="fk_cliente_tipoCliente" ))
 	private TipoCliente tipoCliente;
 	@ManyToOne
-	@JoinColumn(name="id_tipoDocumento", nullable=false, foreignKey=@ForeignKey(name="fk_cliente_tipoDocumento" ))
+	@JoinColumn(name="id_tipo_documento", nullable=false, foreignKey=@ForeignKey(name="fk_cliente_tipoDocumento" ))
 	private TipoDocumento tipoDocumento;
 
+	@ApiModelProperty(notes = "Numero debe tener minimo 20 caracteres")
+	@Column(name="nro_documento", nullable=true, length=20)
+	private Integer nroDocumento;
+	
 	@ApiModelProperty(notes = "Nombres debe tener minimo 999 caracteres")
-	@Size(min=1, message="Nombres debe tener minimo 999 caracteres")
+	@Size(min=1, message="Nombres debe tener minimo 1 caracteres")
 	@Column(name="nombre", nullable=false, length=999)
 	private String nombre;
 	
 	@ApiModelProperty(notes = "Apellido debe tener minimo 999 caracteres")
-	@Size(min=1, message="Apellido debe tener minimo 999 caracteres")
+	@Size(min=1, message="Apellido debe tener minimo 1 caracteres")
 	@Column(name="apellido", nullable=false, length=999)
 	private String apellido;
 	
@@ -91,6 +95,12 @@ public class Cliente {
 	}
 	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
+	}
+	public Integer getNroDocumento() {
+		return nroDocumento;
+	}
+	public void setNroDocumento(Integer nroDocumento) {
+		this.nroDocumento = nroDocumento;
 	}
 	
 
