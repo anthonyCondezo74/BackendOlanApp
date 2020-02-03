@@ -12,21 +12,21 @@ import com.olan.repo.IClienteRepo;
 import com.olan.service.IClienteService;
 
 @Service
-public class ClienteService implements IClienteService{
+public class ClienteService implements IClienteService {
 
 	@Autowired
 	private IClienteRepo repo;
-	
-	
+
 	@Override
 	public Cliente registrar(Cliente obj) {
+
 		return repo.save(obj);
 	}
 
 	@Override
 	public void modificar(Cliente obj) {
 		repo.save(obj);
-		
+
 	}
 
 	@Override

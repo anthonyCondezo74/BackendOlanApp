@@ -1,19 +1,15 @@
 package com.olan.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -22,45 +18,47 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
-@Table(name="reserva")
+@Table(name = "reserva")
 public class Reserva {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer idReserva;
-	
+	private Integer id;
+
 	@ManyToOne
-	@JoinColumn(name="id_cliente", nullable=false, foreignKey=@ForeignKey(name="fk_reserva_cliente" ))
+	@JoinColumn(name = "id_cliente", nullable = false, foreignKey = @ForeignKey(name = "fk_reserva_cliente"))
 	private Cliente cliente;
-	
+
 	@ManyToOne
-	@JoinColumn(name="id_campoDeportivo", nullable=false, foreignKey=@ForeignKey(name="fk_reserva_campoDeportivo" ))
+	@JoinColumn(name = "id_campo_deportivo", nullable = false, foreignKey = @ForeignKey(name = "fk_reserva_campoDeportivo"))
 	private CampoDeportivo campoDeportivo;
 
 	@JsonSerialize(using = ToStringSerializer.class)
-	private LocalDateTime fecha;
-	
+	@Column(nullable = false)
+	private LocalDateTime fechaHoraInicio;
+
 	@JsonSerialize(using = ToStringSerializer.class)
-	private LocalDateTime hora;
-	
-	@ApiModelProperty(notes = "Tiempo debe tener minimo 1 caracteres")
-	@Column(name="tiempo", nullable=false)
-	private Integer tiempo;
-	
+	@Column(nullable = false)
+	private LocalDateTime fechaHoraFinal;
+
 	@ApiModelProperty(notes = "Precio")
-	@Column(name="precio", nullable=false, length=100)
+	@Column(name = "precio", nullable = false, length = 100)
 	private double precio;
-	
+
 	@ManyToOne
-	@JoinColumn(name="id_estado", nullable=false, foreignKey=@ForeignKey(name="fk_reserva_estado" ))
+	@JoinColumn(name = "id_tiempo_alquiler", nullable = false, foreignKey = @ForeignKey(name = "fk_reserva_tiempo_alquiler"))
+	private TiempoAlquiler tiempoAlquiler;
+
+	@ManyToOne
+	@JoinColumn(name = "id_estado", nullable = false, foreignKey = @ForeignKey(name = "fk_reserva_estado"))
 	private Estado estado;
 
-	public Integer getIdReserva() {
-		return idReserva;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setIdReserva(Integer idReserva) {
-		this.idReserva = idReserva;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Cliente getCliente() {
@@ -71,28 +69,12 @@ public class Reserva {
 		this.cliente = cliente;
 	}
 
-	public LocalDateTime getFecha() {
-		return fecha;
+	public CampoDeportivo getCampoDeportivo() {
+		return campoDeportivo;
 	}
 
-	public void setFecha(LocalDateTime fecha) {
-		this.fecha = fecha;
-	}
-
-	public LocalDateTime getHora() {
-		return hora;
-	}
-
-	public void setHora(LocalDateTime hora) {
-		this.hora = hora;
-	}
-
-	public Integer getTiempo() {
-		return tiempo;
-	}
-
-	public void setTiempo(Integer tiempo) {
-		this.tiempo = tiempo;
+	public void setCampoDeportivo(CampoDeportivo campoDeportivo) {
+		this.campoDeportivo = campoDeportivo;
 	}
 
 	public double getPrecio() {
@@ -111,15 +93,28 @@ public class Reserva {
 		this.estado = estado;
 	}
 
-	public CampoDeportivo getCampoDeportivo() {
-		return campoDeportivo;
+	public LocalDateTime getFechaHoraInicio() {
+		return fechaHoraInicio;
 	}
 
-	public void setCampoDeportivo(CampoDeportivo campoDeportivo) {
-		this.campoDeportivo = campoDeportivo;
+	public void setFechaHoraInicio(LocalDateTime fechaHoraInicio) {
+		this.fechaHoraInicio = fechaHoraInicio;
 	}
 
-	
+	public LocalDateTime getFechaHoraFinal() {
+		return fechaHoraFinal;
+	}
 
-	
+	public void setFechaHoraFinal(LocalDateTime fechaHoraFinal) {
+		this.fechaHoraFinal = fechaHoraFinal;
+	}
+
+	public TiempoAlquiler getTiempoAlquiler() {
+		return tiempoAlquiler;
+	}
+
+	public void setTiempoAlquiler(TiempoAlquiler tiempoAlquiler) {
+		this.tiempoAlquiler = tiempoAlquiler;
+	}
+
 }

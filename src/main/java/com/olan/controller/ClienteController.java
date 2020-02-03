@@ -30,68 +30,70 @@ import com.olan.service.IClienteService;
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
-	
+
 	@Autowired
 	private IClienteService service;
-	
+
 	@GetMapping
-	public ResponseEntity<List<Cliente>> listar(){
+	public ResponseEntity<List<Cliente>> listar() {
 		List<Cliente> listaCliente = service.listar();
 		return new ResponseEntity<List<Cliente>>(listaCliente, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/pageable")
 	public ResponseEntity<Page<Cliente>> listarPageable(Pageable pageable) {
 		Page<Cliente> pacientes = service.listarPageable(pageable);
 		return new ResponseEntity<Page<Cliente>>(pacientes, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Cliente> leerPorId(@PathVariable("id") Integer id) {
-		Cliente objCliente =service.leerporId(id);
-		if(objCliente==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
+		Cliente objCliente = service.leerporId(id);
+		if (objCliente == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
 		}
-		
-		return new ResponseEntity<Cliente>(objCliente,HttpStatus.OK);
+
+		return new ResponseEntity<Cliente>(objCliente, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/hateoas/{id}")
 	public Resource<Cliente> leerPorIdHateoas(@PathVariable("id") Integer id) {
-		Cliente objCliente =service.leerporId(id);
-		if(objCliente==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
+		Cliente objCliente = service.leerporId(id);
+		if (objCliente == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
 		}
-		
+
 		Resource<Cliente> resource = new Resource<Cliente>(objCliente);
 		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).leerPorId(id));
-		resource.add(linkTo.withRel("Cliente-resource"));	
-		
+		resource.add(linkTo.withRel("Cliente-resource"));
+
 		return resource;
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<Object> registrar(@RequestBody Cliente obj) {
-		Cliente  Cliente= service.registrar(obj);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(Cliente.getIdCliente()).toUri();
-		return ResponseEntity.created(location).build();//  <Object>(HttpStatus.CREATED);
-	}	
+		Cliente Cliente = service.registrar(obj);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(Cliente.getId())
+				.toUri();
+		return ResponseEntity.created(location).build();// <Object>(HttpStatus.CREATED);
+	}
+
 	@PutMapping
 	public ResponseEntity<Object> modificar(@RequestBody Cliente pac) {
 		service.modificar(pac);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object>  eliminar(@PathVariable("id") Integer id) {
-		Cliente objCliente =service.leerporId(id);
-		if(objCliente==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
-		}else {
+	public ResponseEntity<Object> eliminar(@PathVariable("id") Integer id) {
+		Cliente objCliente = service.leerporId(id);
+		if (objCliente == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
+		} else {
 			service.eliminar(id);
 		}
-			
+
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 
 }
-

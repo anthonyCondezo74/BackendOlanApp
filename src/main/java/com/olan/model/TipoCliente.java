@@ -11,36 +11,36 @@ import javax.validation.constraints.Size;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description= "Informacion del campo de tipo de cliente")
+@ApiModel(description = "Informacion del campo de tipo de cliente")
 @Entity
-@Table(name="tipo_cliente")
+@Table(name = "tipo_cliente")
 public class TipoCliente {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer idTipoCliente;
-	
+	private Integer id;
+
 	@ApiModelProperty(notes = "Nombres debe tener minimo 1 caracteres")
-	@Size(min=1, message="Nombres debe tener minimo 1 caracteres")
-	@Column(name="nombre", nullable=false, length=500)
+	@Size(min = 1, message = "Nombres debe tener minimo 1 caracteres")
+	@Column(name = "nombre", nullable = false, length = 500)
 	private String nombre;
-	
+
 	@ApiModelProperty(notes = "Descripcion debe tener minimo 1 caracteres")
-	@Size(min=1, message="Descripcion debe tener minimo 1 caracteres")
-	@Column(name="descripcion", nullable=false, length=999)
+	@Size(min = 1, message = "Descripcion debe tener minimo 1 caracteres")
+	@Column(name = "descripcion", nullable = false, length = 999)
 	private String descripcion;
-	
+
 	@ApiModelProperty(notes = "Nombres debe tener minimo 1 caracteres")
-	@Size(min=1, message="Nombres debe tener minimo 1 caracteres")
-	@Column(name="estado", nullable=false, length=1)
+	@Size(min = 1, message = "Nombres debe tener minimo 1 caracteres")
+	@Column(name = "estado", nullable = false, length = 1)
 	private String estado;
 
-	public Integer getIdTipoCliente() {
-		return idTipoCliente;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setIdTipoCliente(Integer idTipoCliente) {
-		this.idTipoCliente = idTipoCliente;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getNombre() {
@@ -61,10 +61,10 @@ public class TipoCliente {
 
 	public String getEstado() {
 		if (estado.equals("I")) {
-			this.estado="INACTIVO";
+			this.estado = "INACTIVO";
 		}
 		if (estado.equals("A")) {
-			this.estado="ACTIVO";
+			this.estado = "ACTIVO";
 		}
 		return estado;
 	}
@@ -72,9 +72,5 @@ public class TipoCliente {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
-	
-	
-	
-	
-	
+
 }
