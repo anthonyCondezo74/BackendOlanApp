@@ -28,64 +28,64 @@ import com.olan.service.ITipoClienteService;
 @RestController
 @RequestMapping("/TipoClientes")
 public class TipoClienteController {
-	
+
 	@Autowired
 	private ITipoClienteService service;
-	
+
 	@GetMapping
-	public ResponseEntity<List<TipoCliente>> listar(){
+	public ResponseEntity<List<TipoCliente>> listar() {
 		List<TipoCliente> listaTipoCliente = service.listar();
 		return new ResponseEntity<List<TipoCliente>>(listaTipoCliente, HttpStatus.OK);
 	}
-	
 
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<TipoCliente> leerPorId(@PathVariable("id") Integer id) {
-		TipoCliente objTipoCliente =service.leerporId(id);
-		if(objTipoCliente==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
+		TipoCliente objTipoCliente = service.leerporId(id);
+		if (objTipoCliente == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
 		}
-		
-		return new ResponseEntity<TipoCliente>(objTipoCliente,HttpStatus.OK);
+
+		return new ResponseEntity<TipoCliente>(objTipoCliente, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/hateoas/{id}")
 	public Resource<TipoCliente> leerPorIdHateoas(@PathVariable("id") Integer id) {
-		TipoCliente objTipoCliente =service.leerporId(id);
-		if(objTipoCliente==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
+		TipoCliente objTipoCliente = service.leerporId(id);
+		if (objTipoCliente == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
 		}
-		
+
 		Resource<TipoCliente> resource = new Resource<TipoCliente>(objTipoCliente);
 		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).leerPorId(id));
-		resource.add(linkTo.withRel("TipoCliente-resource"));	
-		
+		resource.add(linkTo.withRel("TipoCliente-resource"));
+
 		return resource;
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<Object> registrar(@RequestBody TipoCliente obj) {
-		TipoCliente  TipoCliente= service.registrar(obj);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(TipoCliente.getIdTipoCliente()).toUri();
-		return ResponseEntity.created(location).build();//  <Object>(HttpStatus.CREATED);
-	}	
+		TipoCliente TipoCliente = service.registrar(obj);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(TipoCliente.getId()).toUri();
+		return ResponseEntity.created(location).build();// <Object>(HttpStatus.CREATED);
+	}
+
 	@PutMapping
 	public ResponseEntity<Object> modificar(@RequestBody TipoCliente pac) {
 		service.modificar(pac);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object>  eliminar(@PathVariable("id") Integer id) {
-		TipoCliente objTipoCliente =service.leerporId(id);
-		if(objTipoCliente==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
-		}else {
+	public ResponseEntity<Object> eliminar(@PathVariable("id") Integer id) {
+		TipoCliente objTipoCliente = service.leerporId(id);
+		if (objTipoCliente == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
+		} else {
 			service.eliminar(id);
 		}
-			
+
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 
 }
-

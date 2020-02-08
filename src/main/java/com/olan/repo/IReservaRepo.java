@@ -11,12 +11,13 @@ import com.olan.model.Reserva;
 
 public interface IReservaRepo extends JpaRepository<Reserva, Integer> {
 
-	@Query("from Reserva r where r.cliente.nroDocumento =:nroDocumento or LOWER(r.cliente.nombre) like %:nombreCompleto% or LOWER(r.cliente.apellido) like %:nombreCompleto%")
-	List<Reserva>buscar(@Param("nroDocumento")int nroDocumento, @Param("nombreCompleto") String nombreCompleto);
-	
-	@Query("from Reserva r where r.fecha between :fechaConsulta and :fechaSgte")
-	List<Reserva> buscarFecha(@Param("fechaConsulta") LocalDateTime fechaReserva, @Param("fechaSgte") LocalDateTime fechaSgte);
-	
+	@Query("from Reserva r where r.cliente.nroDocumento =:nroDocumento or LOWER(r.cliente.nombre) like %:nombreCompleto% or LOWER(r.cliente.apellidoPaterno) like %:nombreCompleto%")
+	List<Reserva> buscar(@Param("nroDocumento") int nroDocumento, @Param("nombreCompleto") String nombreCompleto);
+
+	@Query("from Reserva r where r.fechaHoraInicio between :fechaConsulta and :fechaSgte")
+	List<Reserva> buscarFecha(@Param("fechaConsulta") LocalDateTime fechaReserva,
+			@Param("fechaSgte") LocalDateTime fechaSgte);
+
 	@Query(value = "select * from fn_listarResumen()", nativeQuery = true)
 	List<Object[]> listarResumen();
 }

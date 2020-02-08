@@ -31,62 +31,63 @@ import com.olan.service.IReservaService;
 @RestController
 @RequestMapping("/reservas")
 public class ReservaController {
-	
+
 	@Autowired
 	private IReservaService service;
-	
+
 	@GetMapping
-	public ResponseEntity<List<Reserva>> listar(){
+	public ResponseEntity<List<Reserva>> listar() {
 		List<Reserva> listaReserva = service.listar();
 		return new ResponseEntity<List<Reserva>>(listaReserva, HttpStatus.OK);
 	}
-	
 
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<Reserva> leerPorId(@PathVariable("id") Integer id) {
-		Reserva objReserva =service.leerporId(id);
-		if(objReserva==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
+		Reserva objReserva = service.leerporId(id);
+		if (objReserva == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
 		}
-		
-		return new ResponseEntity<Reserva>(objReserva,HttpStatus.OK);
+
+		return new ResponseEntity<Reserva>(objReserva, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/hateoas/{id}")
 	public Resource<Reserva> leerPorIdHateoas(@PathVariable("id") Integer id) {
-		Reserva objReserva =service.leerporId(id);
-		if(objReserva==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
+		Reserva objReserva = service.leerporId(id);
+		if (objReserva == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
 		}
-		
+
 		Resource<Reserva> resource = new Resource<Reserva>(objReserva);
 		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).leerPorId(id));
-		resource.add(linkTo.withRel("Reserva-resource"));	
-		
+		resource.add(linkTo.withRel("Reserva-resource"));
+
 		return resource;
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<Object> registrar(@RequestBody Reserva obj) {
-		Reserva  Reserva= service.registrar(obj);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(Reserva.getIdReserva()).toUri();
-		return ResponseEntity.created(location).build();//  <Object>(HttpStatus.CREATED);
-	}	
+		Reserva reserva = service.registrar(obj);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(reserva.getId())
+				.toUri();
+		return ResponseEntity.created(location).build();// <Object>(HttpStatus.CREATED);
+	}
+
 	@PutMapping
 	public ResponseEntity<Object> modificar(@RequestBody Reserva pac) {
 		service.modificar(pac);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object>  eliminar(@PathVariable("id") Integer id) {
-		Reserva objReserva =service.leerporId(id);
-		if(objReserva==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
-		}else {
+	public ResponseEntity<Object> eliminar(@PathVariable("id") Integer id) {
+		Reserva objReserva = service.leerporId(id);
+		if (objReserva == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
+		} else {
 			service.eliminar(id);
 		}
-			
+
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 
@@ -95,7 +96,7 @@ public class ReservaController {
 		List<Reserva> consultas = new ArrayList<>();
 
 		if (filtro != null) {
-			if (filtro.getFechaReserva() !=  null) {
+			if (filtro.getFechaReserva() != null) {
 				consultas = service.buscarFecha(filtro);
 			} else {
 				consultas = service.buscar(filtro);
@@ -103,7 +104,7 @@ public class ReservaController {
 		}
 		return new ResponseEntity<List<Reserva>>(consultas, HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = "/listarResumen")
 	public ResponseEntity<List<ConsultaResumenDTO>> listarResumen() {
 		List<ConsultaResumenDTO> consultas = new ArrayList<>();
@@ -111,4 +112,3 @@ public class ReservaController {
 		return new ResponseEntity<List<ConsultaResumenDTO>>(consultas, HttpStatus.OK);
 	}
 }
-

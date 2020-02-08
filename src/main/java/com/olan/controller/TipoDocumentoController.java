@@ -28,64 +28,64 @@ import com.olan.service.ITipoDocumentoService;
 @RestController
 @RequestMapping("/TipoDocumentos")
 public class TipoDocumentoController {
-	
+
 	@Autowired
 	private ITipoDocumentoService service;
-	
+
 	@GetMapping
-	public ResponseEntity<List<TipoDocumento>> listar(){
+	public ResponseEntity<List<TipoDocumento>> listar() {
 		List<TipoDocumento> listaTipoDocumento = service.listar();
 		return new ResponseEntity<List<TipoDocumento>>(listaTipoDocumento, HttpStatus.OK);
 	}
-	
 
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<TipoDocumento> leerPorId(@PathVariable("id") Integer id) {
-		TipoDocumento objTipoDocumento =service.leerporId(id);
-		if(objTipoDocumento==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
+		TipoDocumento objTipoDocumento = service.leerporId(id);
+		if (objTipoDocumento == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
 		}
-		
-		return new ResponseEntity<TipoDocumento>(objTipoDocumento,HttpStatus.OK);
+
+		return new ResponseEntity<TipoDocumento>(objTipoDocumento, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/hateoas/{id}")
 	public Resource<TipoDocumento> leerPorIdHateoas(@PathVariable("id") Integer id) {
-		TipoDocumento objTipoDocumento =service.leerporId(id);
-		if(objTipoDocumento==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
+		TipoDocumento objTipoDocumento = service.leerporId(id);
+		if (objTipoDocumento == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
 		}
-		
+
 		Resource<TipoDocumento> resource = new Resource<TipoDocumento>(objTipoDocumento);
 		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).leerPorId(id));
-		resource.add(linkTo.withRel("TipoDocumento-resource"));	
-		
+		resource.add(linkTo.withRel("TipoDocumento-resource"));
+
 		return resource;
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<Object> registrar(@RequestBody TipoDocumento obj) {
-		TipoDocumento  TipoDocumento= service.registrar(obj);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(TipoDocumento.getIdTipoDocumento()).toUri();
-		return ResponseEntity.created(location).build();//  <Object>(HttpStatus.CREATED);
-	}	
+		TipoDocumento TipoDocumento = service.registrar(obj);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(TipoDocumento.getId()).toUri();
+		return ResponseEntity.created(location).build();// <Object>(HttpStatus.CREATED);
+	}
+
 	@PutMapping
 	public ResponseEntity<Object> modificar(@RequestBody TipoDocumento pac) {
 		service.modificar(pac);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object>  eliminar(@PathVariable("id") Integer id) {
-		TipoDocumento objTipoDocumento =service.leerporId(id);
-		if(objTipoDocumento==null) {
-			throw  new ModelNotFoundException("ID NO ENCONTRADO: "+ id);
-		}else {
+	public ResponseEntity<Object> eliminar(@PathVariable("id") Integer id) {
+		TipoDocumento objTipoDocumento = service.leerporId(id);
+		if (objTipoDocumento == null) {
+			throw new ModelNotFoundException("ID NO ENCONTRADO: " + id);
+		} else {
 			service.eliminar(id);
 		}
-			
+
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 
 }
-
