@@ -73,8 +73,7 @@ public class ClienteController {
 	@PostMapping
 	public ResponseEntity<Object> registrar(@RequestBody Cliente obj) {
 		Cliente Cliente = service.registrar(obj);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(Cliente.getId())
-				.toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(Cliente.getId()).toUri();
 		return ResponseEntity.created(location).build();// <Object>(HttpStatus.CREATED);
 	}
 
